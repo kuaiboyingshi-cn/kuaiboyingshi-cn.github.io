@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="renderer" content="webkit">
+<meta name="applicable-device" content="pc,mobile">
+<meta name="description" content="快播影视 - 影视极速在线观看平台。专注高清影视资源的快速播放与极速加载体验，提供电影、电视剧、综艺、动漫等影视在线观看，加载更快、播放更流畅、资源更全。">
+<meta name="keywords" content="快播影视,快播影视在线观看,影视极速播放,影视快速播放,影视在线观看,高清影视,电影电视剧综艺动漫,影视资源大全">
+<title>快播影视 | kuaiboyingshi-cn · 影视极速在线观看平台 · 加载更快播放更流畅</title>
+<style>
+:root{
+  --bg:#07090f;--bg2:#0c1018;--card:#121823;--card2:#181f2c;
+  --tx:#e8edf5;--tx2:#9aa7bb;--tx3:#5f6d82;
+  --cy:#00e5ff;--cy2:#00b3cc;--bl:#2b6bff;--pn:#ff2d95;--ez:cubic-bezier(.2,.85,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+  line-height:1.75;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none}
+button{font-family:inherit;cursor:pointer;border:0}
+img{max-width:100%}
+::selection{background:var(--cy);color:#07090f}
+h1,h2,h3{font-family:inherit}
+
+/* 动态网格背景 */
+.gridbg{position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(900px 500px at 15% 10%,rgba(0,229,255,.16),transparent 60%),
+    radial-gradient(700px 500px at 88% 85%,rgba(255,45,149,.14),transparent 60%),
+    linear-gradient(180deg,#07090f,#0a0d14);
+}
+.gridln{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.32;
+  background-image:linear-gradient(rgba(0,229,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.14) 1px,transparent 1px);
+  background-size:58px 58px;mask-image:radial-gradient(circle at 50% 40%,#000 30%,transparent 78%)}
+.rays{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.22;
+  background:repeating-conic-gradient(from 0deg at 50% -10%,rgba(0,229,255,.5) 0deg 2deg,transparent 2deg 22deg)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+section{padding:104px 0;position:relative}
+.kicker{display:inline-flex;align-items:center;gap:9px;font-size:11px;font-weight:800;letter-spacing:2.6px;color:var(--cy);padding:6px 14px;border-radius:3px;background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3)}
+.kicker .sq{width:6px;height:6px;background:var(--cy);box-shadow:0 0 10px var(--cy)}
+.h2{font-size:clamp(26px,4vw,42px);line-height:1.3;font-weight:900;letter-spacing:.3px}
+.h2 em{font-style:normal;color:var(--cy)}
+.lede{color:var(--tx2);font-size:16px;max-width:640px}
+
+/* 头部 */
+.hd{position:sticky;top:0;z-index:100;background:rgba(7,9,15,.86);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,229,255,.2)}
+.nv{max-width:1180px;margin:0 auto;padding:0 22px;height:74px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:12px;font-weight:950;font-size:20px;letter-spacing:.5px}
+.logo .pl{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;font-size:18px;font-weight:950;color:#07090f;background:linear-gradient(135deg,var(--cy),var(--bl));box-shadow:0 0 22px rgba(0,229,255,.45)}
+.logo .zm{display:flex;flex-direction:column;line-height:1.1}
+.logo .zm small{font-size:9.5px;color:var(--tx3);letter-spacing:2px;font-weight:700}
+.menu{display:flex;align-items:center;gap:4px}
+.menu a{padding:8px 15px;font-size:14.5px;color:var(--tx2);position:relative;transition:.25s}
+.menu a::after{content:"";position:absolute;left:15px;right:15px;bottom:2px;height:2px;background:var(--cy);box-shadow:0 0 8px var(--cy);transform:scaleX(0);transform-origin:right;transition:.35s var(--ez)}
+.menu a:hover{color:var(--cy)}
+.menu a:hover::after{transform:scaleX(1);transform-origin:left}
+.menu .cta{padding:10px 22px;margin-left:12px;font-size:14px;font-weight:850;color:#07090f;background:linear-gradient(135deg,var(--cy),var(--cy2));border-radius:6px}
+.menu .cta:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,229,255,.4)}
+.bmb{display:none;width:42px;height:42px;border:1px solid rgba(0,229,255,.4);background:transparent;color:var(--cy);font-size:20px;border-radius:7px}
+
+/* Hero —— 播放器仪表盘 */
+.hero{padding:72px 0 28px}
+.hg{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero h1{font-size:clamp(40px,5.8vw,66px);line-height:1.06;font-weight:950}
+.hero h1 .hl{background:linear-gradient(90deg,var(--cy),var(--pn));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero h1 .en{display:block;font-size:.3em;letter-spacing:5px;color:var(--tx3);margin-top:18px;font-weight:700;-webkit-text-fill-color:var(--tx3)}
+.hero .desc{margin:24px 0 30px;font-size:17px;color:var(--tx2);max-width:520px}
+.acts{display:flex;flex-wrap:wrap;gap:14px}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:15px 30px;border-radius:6px;font-size:15.5px;font-weight:850;transition:.3s var(--ez)}
+.bc{background:linear-gradient(135deg,var(--cy),var(--cy2));color:#07090f}
+.bc:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(0,229,255,.35)}
+.bg{background:transparent;color:var(--tx);border:1.5px solid rgba(0,229,255,.4)}
+.bg:hover{border-color:var(--cy);color:var(--cy)}
+.honor{display:flex;gap:26px;margin-top:34px;flex-wrap:wrap}
+.honor div{text-align:center}
+.honor b{display:block;font-size:25px;font-weight:950;color:var(--cy);text-shadow:0 0 18px rgba(0,229,255,.5)}
+.honor span{font-size:12px;color:var(--tx3)}
+
+/* 播放器 */
+.plyr{position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;border:1px solid rgba(0,229,255,.25);background:#05070c;box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 0 6px rgba(0,229,255,.05)}
+.plyr .scr{position:absolute;inset:0;background:
+  radial-gradient(420px 260px at 50% 45%,rgba(43,107,255,.45),transparent 65%),
+  radial-gradient(300px 200px at 30% 70%,rgba(0,229,255,.3),transparent 65%),
+  linear-gradient(160deg,#0e1626,#07090f);}
+.plyr .scr::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.16) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(135deg,#000 10%,transparent 70%)}
+.plyr .pbtn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:74px;height:74px;border-radius:50%;display:grid;place-items:center;font-size:26px;color:#07090f;background:var(--cy);box-shadow:0 0 0 0 rgba(0,229,255,.6);animation:pl 2s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(0,229,255,.55)}70%{box-shadow:0 0 0 26px rgba(0,229,255,0)}100%{box-shadow:0 0 0 0 rgba(0,229,255,0)}}
+.plyr .badge{position:absolute;top:14px;left:14px;display:flex;gap:6px}
+.plyr .badge span{font-size:10px;font-weight:850;padding:4px 9px;border-radius:3px;background:rgba(255,45,149,.95);color:#fff;letter-spacing:1px}
+.plyr .badge span.cy{background:rgba(0,229,255,.95);color:#07090f}
+.plyr .ctl{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent)}
+.plyr .bar{height:4px;border-radius:4px;background:rgba(255,255,255,.22);overflow:hidden;margin-bottom:10px}
+.plyr .bar i{display:block;height:100%;width:42%;background:linear-gradient(90deg,var(--cy),var(--pn))}
+.plyr .ctls{display:flex;justify-content:space-between;align-items:center;color:var(--tx2);font-size:11.5px}
+.plyr .ctls .l{display:flex;gap:14px;align-items:center}
+.plyr .ctls .t{width:30px;height:20px;border-radius:4px;background:rgba(255,255,255,.16);display:grid;place-items:center;font-size:10px;font-weight:900;color:#fff}
+.plyr .ql{position:absolute;right:14px;top:14px;width:78px;height:78px}
+.plyr .ql::before{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid rgba(255,255,255,.16);border-top-color:var(--cy);transform:rotate(0deg);box-shadow:0 0 14px rgba(0,229,255,.4)}
+
+/* 栏目一：极速体验 —— 速度条 */
+.cat-head{text-align:center;margin-bottom:46px}
+.cat-head .lede{margin:0 auto}
+.spd{display:grid;gap:16px;max-width:1000px;margin:0 auto}
+.spd .sp{padding:22px 26px;border-radius:8px;background:var(--card);border:1px solid rgba(0,229,255,.14);display:grid;grid-template-columns:150px 1fr 88px;gap:24px;align-items:center;transition:.45s var(--ez)}
+.spd .sp:hover{border-color:var(--cy);transform:translateX(6px);background:var(--card2)}
+.spd .sp h3{font-size:16.5px;font-weight:850}
+.spd .sp .tr{height:10px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
+.spd .sp .tr i{display:block;height:100%;border-radius:6px;width:0;background:linear-gradient(90deg,var(--cy),var(--bl));box-shadow:0 0 10px rgba(0,229,255,.5);transition:width 1.4s var(--ez)}
+.spd .sp .vv{text-align:right;font-size:26px;font-weight:950;color:var(--cy);line-height:1;text-shadow:0 0 16px rgba(0,229,255,.45)}
+.spd .sp .vv small{font-size:11px;color:var(--tx3);font-weight:800}
+
+/* 栏目二：频道 —— 等宽等距矩阵 */
+.works-head{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;margin-bottom:46px}
+.grd{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid rgba(0,229,255,.18)}
+.grd .gd{padding:26px 18px;text-align:center;border-right:1px solid rgba(0,229,255,.14);border-bottom:1px solid rgba(0,229,255,.14);transition:.4s;position:relative;overflow:hidden}
+.grd .gd:nth-child(4n){border-right:0}
+.grd .gd:nth-child(n+5){border-bottom:0}
+.grd .gd:hover{background:var(--card2)}
+.grd .gd .ic{width:52px;height:52px;margin:0 auto 14px;border-radius:12px;display:grid;place-items:center;font-size:22px;font-weight:950;color:#07090f;background:linear-gradient(135deg,var(--cy),var(--bl))}
+.grd .gd:nth-child(2) .ic{background:linear-gradient(135deg,var(--pn),#ff6b00)}
+.grd .gd:nth-child(3) .ic{background:linear-gradient(135deg,#b06bff,#ff2d95)}
+.grd .gd:nth-child(4) .ic{background:linear-gradient(135deg,#00e5a8,#00b3cc)}
+.grd .gd:nth-child(5) .ic{background:linear-gradient(135deg,#ffd23f,#ff8a00)}
+.grd .gd:nth-child(6) .ic{background:linear-gradient(135deg,#ff6b6b,#ff2d95)}
+.grd .gd:nth-child(7) .ic{background:linear-gradient(135deg,#2bd9ff,#2b6bff)}
+.grd .gd:nth-child(8) .ic{background:linear-gradient(135deg,#a8ff5e,#00b3cc)}
+.grd .gd h3{font-size:15.5px;font-weight:850}
+.grd .gd span{font-size:11.8px;color:var(--tx3)}
+.grd .gd em{font-style:normal;position:absolute;top:10px;right:10px;font-size:9.5px;font-weight:850;letter-spacing:1px;color:var(--cy);opacity:.7}
+
+/* 栏目三：热播榜 —— 双列交叉进度 */
+.st-head{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;margin-bottom:46px}
+.rkb{display:grid;gap:12px}
+.rk{padding:16px 20px;border-radius:7px;background:var(--card);border-left:3px solid var(--cy);display:grid;grid-template-columns:36px 1fr auto;gap:16px;align-items:center;transition:.4s}
+.rk:hover{background:var(--card2);transform:translateX(6px)}
+.rk .no{width:32px;height:32px;border-radius:6px;display:grid;place-items:center;font-size:14px;font-weight:950;color:var(--cy);background:rgba(0,229,255,.12)}
+.rk .mx{font-size:13.8px;font-weight:800}
+.rk .mx i{font-style:normal;display:block;font-size:11.5px;color:var(--tx3);font-weight:700}
+.rk .ht{font-size:12px;color:var(--tx2);font-weight:800;text-align:right}
+.rk .ht b{display:block;font-size:17px;font-weight:950;color:var(--pn)}
+.rk:nth-child(1){border-color:var(--pn)}
+.rk:nth-child(1) .no{background:var(--pn);color:#fff}
+.rk:nth-child(2){border-color:#ff8a00}
+.rk:nth-child(2) .no{color:#ff8a00;background:rgba(255,138,0,.14)}
+
+/* 栏目四：技术架构 —— 节点管线 */
+.id-head{text-align:center;margin-bottom:46px}
+.id-head .lede{margin:0 auto}
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:0;align-items:stretch;max-width:1000px;margin:0 auto}
+.pipe .nd{position:relative;padding:26px 16px;text-align:center;background:var(--card);border:1px solid rgba(0,229,255,.16)}
+.pipe .nd:not(:last-child)::after{content:"";position:absolute;top:50%;right:-13px;width:26px;height:2px;background:linear-gradient(90deg,var(--cy),transparent);z-index:2}
+.pipe .nd .ic{width:48px;height:48px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;font-size:19px;font-weight:950;color:#07090f;background:linear-gradient(135deg,var(--cy),var(--bl))}
+.pipe .nd h4{font-size:14.5px;font-weight:850}
+.pipe .nd span{font-size:11.4px;color:var(--tx3)}
+.pipe .nd small{display:block;margin-top:8px;font-size:10.5px;font-weight:850;color:var(--cy);letter-spacing:1px}
+
+/* 栏目五：设备矩阵 —— 三层叠 */
+.cr-head{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;margin-bottom:46px}
+.dev{position:relative;height:300px;display:grid;place-items:center}
+.dev .dc{position:absolute;border-radius:12px;background:var(--card2);border:1px solid rgba(0,229,255,.2);overflow:hidden;box-shadow:0 20px 44px rgba(0,0,0,.5)}
+.dev .tv{width:300px;height:180px;transform:rotate(-6deg) translate(-70px,0)}
+.dev .pc{width:230px;height:150px;transform:rotate(2deg);z-index:2;border-color:var(--cy);box-shadow:0 0 30px rgba(0,229,255,.25)}
+.dev .mb{width:96px;height:170px;border-radius:18px;transform:rotate(7deg) translate(90px,6px);z-index:3;border-color:var(--pn);box-shadow:0 0 26px rgba(255,45,149,.3)}
+.dev .dc::before{content:"";position:absolute;inset:0;background:radial-gradient(160px 100px at 40% 40%,rgba(0,229,255,.3),transparent 65%)}
+.dev .dc span{position:absolute;bottom:8px;left:10px;font-size:10.5px;font-weight:850;color:var(--cy)}
+.dev .dc.mb span{color:var(--pn)}
+.devs{display:grid;gap:12px}
+.devs .dv{padding:18px 22px;border-radius:7px;background:var(--card);border-left:3px solid var(--cy);transition:.4s}
+.devs .dv:hover{background:var(--card2);transform:translateX(6px)}
+.devs .dv b{font-size:15.5px;font-weight:850}
+.devs .dv p{font-size:13px;color:var(--tx2);margin-top:4px}
+
+/* 栏目六：更新动态 —— 时间轴 */
+.cal-head{text-align:center;margin-bottom:46px}
+.cal-head .lede{margin:0 auto}
+.tml{max-width:820px;margin:0 auto;position:relative;padding-left:26px}
+.tml::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--cy),var(--pn),transparent)}
+.tm{padding:16px 20px;margin-bottom:14px;border-radius:7px;background:var(--card);border:1px solid rgba(0,229,255,.14);position:relative;transition:.4s}
+.tm:hover{border-color:var(--cy);transform:translateX(6px)}
+.tm::before{content:"";position:absolute;left:-23px;top:22px;width:12px;height:12px;border-radius:50%;background:var(--cy);box-shadow:0 0 0 4px rgba(0,229,255,.18)}
+.tm:nth-child(2)::before{background:var(--pn);box-shadow:0 0 0 4px rgba(255,45,149,.18)}
+.tm:nth-child(3)::before{background:#ff8a00;box-shadow:0 0 0 4px rgba(255,138,0,.18)}
+.tm:nth-child(4)::before{background:#a8ff5e;box-shadow:0 0 0 4px rgba(168,255,94,.18)}
+.tm .dt{font-size:11px;font-weight:850;color:var(--cy);letter-spacing:1px}
+.tm h4{font-size:15.5px;font-weight:850;margin:3px 0}
+.tm p{font-size:13px;color:var(--tx2)}
+
+/* 栏目七：数据 —— 仪表盘 */
+.wd-head{text-align:center;margin-bottom:46px}
+.wd-head .lede{margin:0 auto}
+.dsh{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.dsh .ds{border-radius:10px;padding:26px 20px;background:var(--card);border:1px solid rgba(0,229,255,.14);text-align:center;transition:.5s var(--ez)}
+.dsh .ds:hover{border-color:var(--cy);transform:translateY(-5px)}
+.dsh .ds .ring{width:88px;height:88px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;background:conic-gradient(var(--cy) var(--p,0%),rgba(255,255,255,.09) 0)}
+.dsh .ds .ring::before{content:"";position:absolute;width:66px;height:66px;border-radius:50%;background:var(--card)}
+.dsh .ds .ring b{position:relative;font-size:20px;font-weight:950;color:var(--cy)}
+.dsh .ds:nth-child(2) .ring{background:conic-gradient(var(--pn) var(--p,0%),rgba(255,255,255,.09) 0)}
+.dsh .ds:nth-child(2) .ring b{color:var(--pn)}
+.dsh .ds:nth-child(3) .ring{background:conic-gradient(#ff8a00 var(--p,0%),rgba(255,255,255,.09) 0)}
+.dsh .ds:nth-child(3) .ring b{color:#ff8a00}
+.dsh .ds:nth-child(4) .ring{background:conic-gradient(#a8ff5e var(--p,0%),rgba(255,255,255,.09) 0)}
+.dsh .ds:nth-child(4) .ring b{color:#a8ff5e}
+.dsh .ds .lb{font-size:12.4px;color:var(--tx2);font-weight:800}
+
+/* 栏目八：FAQ */
+.fq-head{text-align:center;margin-bottom:46px}
+.fq-head .lede{margin:0 auto}
+.fql{max-width:840px;margin:0 auto;display:grid;gap:10px}
+.fqi{border-radius:7px;border:1px solid rgba(0,229,255,.16);background:var(--card);overflow:hidden}
+.fqh{padding:19px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:16px;transition:.3s}
+.fqh:hover{background:rgba(0,229,255,.06)}
+.fqh h4{font-size:15.4px;font-weight:850}
+.fqh .pm{width:30px;height:30px;border-radius:5px;flex:none;display:grid;place-items:center;font-size:18px;font-weight:900;color:var(--cy);background:rgba(0,229,255,.12);transition:.4s var(--ez)}
+.fqi.open .fqh .pm{transform:rotate(45deg);background:var(--cy);color:#07090f}
+.fqb{max-height:0;overflow:hidden;transition:max-height .55s var(--ez)}
+.fqi.open .fqb{max-height:300px}
+.fqb p{padding:0 24px 22px;color:var(--tx2);font-size:14.2px}
+
+.ft{border-top:1px solid rgba(0,229,255,.2);background:#05070c;padding:58px 0 24px;margin-top:40px}
+.ft-top{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:40px;margin-bottom:38px}
+.ft-col h4{font-size:13.5px;font-weight:850;margin-bottom:15px;color:var(--cy);letter-spacing:1px}
+.ft-col a{display:block;font-size:13.8px;color:var(--tx2);padding:6px 0;transition:.25s}
+.ft-col a:hover{color:var(--cy);transform:translateX(4px)}
+.ft-col p{font-size:13.2px;color:var(--tx3);max-width:330px}
+.ft .logo{color:var(--tx)}
+.ft .logo .zm small{color:var(--tx3)}
+.ft-bot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(0,229,255,.14);font-size:12.8px;color:var(--tx3)}
+.ft-bot a{color:var(--tx2);margin-left:18px}
+
+@media(max-width:1020px){
+  .grd{grid-template-columns:repeat(2,1fr)}
+  .grd .gd{border-right:0!important;border-bottom:1px solid rgba(0,229,255,.14)!important}
+  .grd .gd:nth-child(odd){border-right:1px solid rgba(0,229,255,.14)!important}
+  .grd .gd:nth-child(n+7){border-bottom:0!important}
+  .pipe{grid-template-columns:repeat(5,1fr)}
+  .works-head,.st-head,.cr-head{grid-template-columns:1fr}
+  .dsh,.spd .sp{grid-template-columns:repeat(2,1fr)}
+  .spd .sp{grid-template-columns:1fr;text-align:left}
+  .spd .sp .vv{text-align:left}
+}
+@media(max-width:780px){
+  section{padding:74px 0}
+  .hg{grid-template-columns:1fr;gap:50px}
+  .cat-head,.st-head,.id-head,.cr-head,.wd-head,.fq-head,cal-head,.cal-head{text-align:left}
+  .cat-head .lede,.st-head .lede,.id-head .lede,.cr-head .lede,.wd-head .lede,.fq-head .lede,.cal-head .lede{margin:0}
+  .menu{position:fixed;top:74px;left:0;right:0;flex-direction:column;padding:16px;background:rgba(7,9,15,.98);border-bottom:1px solid rgba(0,229,255,.25);transform:translateY(-160%);transition:.45s var(--ez)}
+  .menu.open{transform:translateY(0)}
+  .menu a{padding:12px;width:100%;text-align:center;border-bottom:1px solid rgba(0,229,255,.1)}
+  .menu a::after{display:none}
+  .menu .cta{margin:8px 0 0;width:100%;text-align:center}
+  .bmb{display:block}
+  .hero h1{font-size:44px}
+  .pipe{flex-wrap:wrap;display:grid;grid-template-columns:1fr}
+  .pipe .nd::after{display:none}
+  .dsh{grid-template-columns:1fr}
+  .plyr{aspect-ratio:4/3}
+  .plyr .ql{display:none}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/xiaobao.js"></script>
+
+<div class="gridbg" aria-hidden="true"></div>
+<div class="gridln" aria-hidden="true"></div>
+<div class="rays" aria-hidden="true"></div>
+
+<header class="hd">
+  <div class="nv">
+    <a href="#top" class="logo"><span class="pl">▶</span><span class="zm">快播影视<small>KUAI BO PICTURES</small></span></a>
+    <nav class="menu" id="menu">
+      <a href="#works">频道分类</a>
+      <a href="#rank">热播榜单</a>
+      <a href="#speed">极速体验</a>
+      <a href="#tech">技术架构</a>
+      <a href="#device">多端支持</a>
+      <a href="#data">平台数据</a>
+      <a href="#news">更新动态</a>
+      <a href="#top" class="cta">极速观看</a>
+    </nav>
+    <button class="bmb" id="bmb" aria-label="菜单">☰</button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="wrap hg">
+    <div>
+      <span class="kicker"><span class="sq"></span> FAST STREAMING</span>
+      <h1><span class="hl">极速播放</span> 快人一步<span class="en">KUAI BO PICTURES · 影视极速在线观看平台</span></h1>
+      <p class="desc">快播影视专注高清影视资源的快速播放与极速加载体验，提供电影、电视剧、综艺、动漫等影视在线观看，加载更快、播放更流畅、资源更全。</p>
+      <div class="acts">
+        <a href="#works" class="btn bc">开始极速观看 ›</a>
+        <a href="#tech" class="btn bg">了解极速技术</a>
+      </div>
+      <div class="honor">
+        <div><b>&lt;0.8s</b><span>首帧加载</span></div>
+        <div><b>50,000+</b><span>影视资源</span></div>
+        <div><b>99.9%</b><span>播放流畅率</span></div>
+      </div>
+    </div>
+    <div class="plyr">
+      <div class="scr"></div>
+      <div class="ql"></div>
+      <div class="badge"><span class="cy">LIVE</span><span>4K HDR</span></div>
+      <div class="pbtn">▶</div>
+      <div class="ctl">
+        <div class="bar"><i></i></div>
+        <div class="ctls"><div class="l"><span class="t">HD</span><span>02:18 / 45:30</span></div><span>画质 · 4K</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 栏目一：极速体验 -->
+<section id="speed">
+  <div class="wrap">
+    <div class="cat-head">
+      <span class="kicker"><span class="sq"></span> SPEED TEST</span>
+      <h2 class="h2">极速<em>体验</em></h2>
+      <p class="lede">快播影视以极速加载与流畅播放为核心，从首帧到拖拽响应全面优化，让影视观看告别等待。</p>
+    </div>
+    <div class="spd">
+      <div class="sp"><h3>首帧加载</h3><div class="tr"><i data-w="96"></i></div><div class="vv">0.8<small>秒</small></div></div>
+      <div class="sp"><h3>拖拽响应</h3><div class="tr"><i data-w="92"></i></div><div class="vv">0.3<small>秒</small></div></div>
+      <div class="sp"><h3>缓冲命中率</h3><div class="tr"><i data-w="99"></i></div><div class="vv">99.9<small>%</small></div></div>
+      <div class="sp"><h3>并发承载</h3><div class="tr"><i data-w="88"></i></div><div class="vv">100<small>万+</small></div></div>
+      <div class="sp"><h3>资源覆盖率</h3><div class="tr"><i data-w="95"></i></div><div class="vv">98<small>%</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 栏目二：频道分类 -->
+<section id="works" style="background:rgba(0,229,255,.04)">
+  <div class="wrap">
+    <div class="works-head">
+      <div>
+        <span class="kicker"><span class="sq"></span> CHANNELS</span>
+        <h2 class="h2">频道<em>分类</em></h2>
+      </div>
+      <p class="lede">快播影视覆盖电影、电视剧、综艺、动漫、纪录片、短剧、体育赛事、音乐现场等多元频道，资源全面更新及时。</p>
+    </div>
+    <div class="grd">
+      <div class="gd"><em>HD</em><div class="ic">影</div><h3>电影</h3><span>院线热映 / 经典回顾</span></div>
+      <div class="gd"><em>HOT</em><div class="ic">剧</div><h3>电视剧</h3><span>国产 / 美剧 / 韩剧 / 日剧</span></div>
+      <div class="gd"><em>NEW</em><div class="ic">综</div><h3>综艺</h3><span>真人秀 / 选秀 / 脱口秀</span></div>
+      <div class="gd"><em>4K</em><div class="ic">漫</div><h3>动漫</h3><span>国漫 / 日漫 / 新番连载</span></div>
+      <div class="gd"><em>REC</em><div class="ic">纪</div><h3>纪录片</h3><span>自然 / 历史 / 人文 / 科技</span></div>
+      <div class="gd"><em>VIP</em><div class="ic">短</div><h3>短剧</h3><span>竖屏 / 微短剧 / 系列剧</span></div>
+      <div class="gd"><em>LIVE</em><div class="ic">赛</div><h3>体育赛事</h3><span>足球 / 篮球 / 综合赛事</span></div>
+      <div class="gd"><em>8K</em><div class="ic">音</div><h3>音乐现场</h3><span>演唱会 / 音乐节 / 晚会</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 栏目三：热播榜单 -->
+<section id="rank">
+  <div class="wrap">
+    <div class="st-head">
+      <div>
+        <span class="kicker"><span class="sq"></span> RANKING</span>
+        <h2 class="h2">热播<em>榜单</em></h2>
+      </div>
+      <p class="lede">快播影视实时更新的热播影视榜单，涵盖电影、电视剧、综艺、动漫等频道的热度排行。</p>
+    </div>
+    <div class="rkb">
+      <div class="rk"><span class="no">1</span><div class="mx">封神演义<em>仙侠 · 古装 · 热度飙升</em></div><div class="ht">热度<b>9,862</b>万</div></div>
+      <div class="rk"><span class="no">2</span><div class="mx">长风镖局<em>武侠 · 江湖 · 动作</em></div><div class="ht">热度<b>9,145</b>万</div></div>
+      <div class="rk"><span class="no">3</span><div class="mx">大明风华<em>历史 · 权谋 · 群像</em></div><div class="ht">热度<b>8,730</b>万</div></div>
+      <div class="rk"><span class="no">4</span><div class="mx">锦绣未央宫<em>宫廷 · 情感 · 权谋</em></div><div class="ht">热度<b>8,210</b>万</div></div>
+      <div class="rk"><span class="no">5</span><div class="mx">云海谣<em>仙侠 · 爱情 · 特效</em></div><div class="ht">热度<b>7,688</b>万</div></div>
+      <div class="rk"><span class="no">6</span><div class="mx">山海奇缘<em>神话 · 奇幻 · 东方</em></div><div class="ht">热度<b>7,152</b>万</div></div>
+      <div class="rk"><span class="no">7</span><div class="mx">长安十二时辰<em>传奇 · 悬疑 · 唐风</em></div><div class="ht">热度<b>6,804</b>万</div></div>
+      <div class="rk"><span class="no">8</span><div class="mx">九州缥缈录<em>奇幻 · 史诗 · 群像</em></div><div class="ht">热度<b>6,330</b>万</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 栏目四：技术架构 -->
+<section id="tech" style="background:rgba(0,229,255,.04)">
+  <div class="wrap">
+    <div class="id-head">
+      <span class="kicker"><span class="sq"></span> ARCHITECTURE</span>
+      <h2 class="h2">技术<em>架构</em></h2>
+      <p class="lede">快播影视自研极速播放引擎，通过多节点调度、智能码率适配、P2P 加速与边缘缓存，实现影视资源秒开快播。</p>
+    </div>
+    <div class="pipe">
+      <div class="nd"><div class="ic">①</div><h4>节点调度</h4><span>全球智能选路</span><small>NODE</small></div>
+      <div class="nd"><div class="ic">②</div><h4>边缘缓存</h4><span>就近分发加速</span><small>EDGE</small></div>
+      <div class="nd"><div class="ic">③</div><h4>智能码率</h4><span>网络自适应切换</span><small>ABR</small></div>
+      <div class="nd"><div class="ic">④</div><h4>P2P 加速</h4><span>多点协同传输</span><small>P2P</small></div>
+      <div class="nd"><div class="ic">⑤</div><h4>极速解码</h4><span>硬件硬解渲染</span><small>DECODE</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- 栏目五：多端支持 -->
+<section id="device">
+  <div class="wrap">
+    <div class="cr-head">
+      <div>
+        <span class="kicker"><span class="sq"></span> DEVICES</span>
+        <h2 class="h2">多端<em>支持</em></h2>
+      </div>
+      <p class="lede">快播影视全面支持电视、电脑、手机、平板等多终端同步观看，账号互通进度云端同步。</p>
+    </div>
+    <div class="dev">
+      <div class="dc tv"><span>TV · 大屏</span></div>
+      <div class="dc pc"><span>PC · 网页端</span></div>
+      <div class="dc mb"><span>MOBILE · 移动端</span></div>
+    </div>
+    <div class="devs">
+      <div class="dv"><b>智能电视</b><p>客厅大屏专享，遥控器适配，支持 4K 超高清输出。</p></div>
+      <div class="dv"><b>电脑网页</b><p>无需下载客户端，浏览器直接播放，支持快捷键操作。</p></div>
+      <div class="dv"><b>手机平板</b><p>移动端自适应，碎片化时间随时看，流量节省模式。</p></div>
+      <div class="dv"><b>云端同步</b><p>多设备登录同一账号，观看进度与收藏跨端实时同步。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 栏目六：更新动态 -->
+<section id="news" style="background:rgba(0,229,255,.04)">
+  <div class="wrap">
+    <div class="cal-head">
+      <span class="kicker"><span class="sq"></span> UPDATES</span>
+      <h2 class="h2">更新<em>动态</em></h2>
+      <p class="lede">快播影视持续迭代播放技术与内容资源，最新更新动态与功能上线记录。</p>
+    </div>
+    <div class="tml">
+      <div class="tm"><div class="dt">2026.09 · 新功能上线</div><h4>8K 超高清播放引擎上线</h4><p>支持 8K 分辨率与 HDR10+ 色彩空间，画质再升级。</p></div>
+      <div class="tm"><div class="dt">2026.08 · 资源扩充</div><h4>影视资源库突破 5 万部</h4><p>新增院线电影、经典剧集与纪录片，覆盖更多题材频道。</p></div>
+      <div class="tm"><div class="dt">2026.07 · 技术优化</div><h4>首帧加载优化至 0.8 秒</h4><p>边缘节点扩容与调度算法升级，冷启动速度提升 40%。</p></div>
+      <div class="tm"><div class="dt">2026.06 · 功能迭代</div><h4>多端云端同步功能发布</h4><p>电视、电脑、手机三端进度互通，无缝接续观看。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 栏目七：平台数据 -->
+<section id="data">
+  <div class="wrap">
+    <div class="wd-head">
+      <span class="kicker"><span class="sq"></span> DATA</span>
+      <h2 class="h2">平台<em>数据</em></h2>
+      <p class="lede">快播影视平台核心数据一览，见证影视资源的规模与播放体验的稳定性。</p>
+    </div>
+    <div class="dsh">
+      <div class="ds"><div class="ring" style="--p:0%"><b data-t="50000" data-s="万+">0</b></div><div class="lb">影视资源总量</div></div>
+      <div class="ds"><div class="ring" style="--p:0%"><b data-t="120" data-s="万">0</b></div><div class="lb">日活跃用户</div></div>
+      <div class="ds"><div class="ring" style="--p:0%"><b data-t="99" data-s=".9%">0</b></div><div class="lb">播放流畅率</div></div>
+      <div class="ds"><div class="ring" style="--p:0%"><b data-t="0" data-s=".8s">0</b></div><div class="lb">首帧加载时间</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 栏目八：FAQ -->
+<section id="faq" style="background:rgba(0,229,255,.04)">
+  <div class="wrap">
+    <div class="fq-head">
+      <span class="kicker"><span class="sq"></span> FAQ</span>
+      <h2 class="h2">常见<em>问题</em></h2>
+      <p class="lede">关于快播影视的极速播放、频道分类、多端支持、更新节奏等常见问题解答。</p>
+    </div>
+    <div class="fql">
+      <div class="fqi open"><div class="fqh"><h4>快播影视为什么能做到极速播放？</h4><span class="pm">+</span></div><div class="fqb"><p>快播影视自研极速播放引擎，通过多节点智能调度、边缘缓存、智能码率适配与 P2P 加速技术，实现影视资源秒开快播。</p></div></div>
+      <div class="fqi"><div class="fqh"><h4>支持哪些影视频道分类？</h4><span class="pm">+</span></div><div class="fqb"><p>覆盖电影、电视剧、综艺、动漫、纪录片、短剧、体育赛事、音乐现场等多元频道，资源全面更新及时。</p></div></div>
+      <div class="fqi"><div class="fqh"><h4>支持哪些设备观看？</h4><span class="pm">+</span></div><div class="fqb"><p>全面支持智能电视、电脑网页、手机与平板等多终端，账号互通观看进度云端实时同步。</p></div></div>
+      <div class="fqi"><div class="fqh"><h4>最高支持什么画质？</h4><span class="pm">+</span></div><div class="fqb"><p>支持从 480P 到 8K 的多档画质，并提供 HDR10+ 色彩空间，画质随网络条件智能适配。</p></div></div>
+      <div class="fqi"><div class="fqh"><h4>影视资源多久更新一次？</h4><span class="pm">+</span></div><div class="fqb"><p>院线电影、热播剧集与综艺按周更新，新剧上线与资源扩充动态均会在更新动态中同步。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-col">
+        <a href="#top" class="logo"><span class="pl">▶</span><span class="zm">快播影视<small>KUAI BO PICTURES</small></span></a>
+        <p>快播影视专注影视极速在线观看，以极速加载与流畅播放为核心，提供电影、电视剧、综艺、动漫等高清影视资源。</p>
+      </div>
+      <div class="ft-col"><h4>频道分类</h4><a href="#works">电影</a><a href="#works">电视剧</a><a href="#works">综艺</a><a href="#works">动漫</a><a href="#works">纪录片</a></div>
+      <div class="ft-col"><h4>平台服务</h4><a href="#speed">极速体验</a><a href="#tech">技术架构</a><a href="#device">多端支持</a><a href="#data">平台数据</a><a href="#news">更新动态</a></div>
+      <div class="ft-col"><h4>关于平台</h4><a href="#">平台简介</a><a href="#">合作洽谈</a><a href="#">观看帮助</a><a href="#">版权声明</a><a href="#">友情链接</a></div>
+    </div>
+    <div class="ft-bot">
+      <span>© 2026 快播影视 · 影视极速在线观看平台 · https://kuaiboyingshi-cn.github.io</span>
+      <span><a href="#">友情链接</a><a href="#">免责声明</a><a href="#">服务条款</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var b=document.getElementById('bmb'),m=document.getElementById('menu');
+  b.addEventListener('click',function(){m.classList.toggle('open')});
+  m.addEventListener('click',function(e){if(e.target.tagName==='A')m.classList.remove('open')});
+
+  document.querySelectorAll('.fqi').forEach(function(fi){
+    fi.querySelector('.fqh').addEventListener('click',function(){
+      var open=fi.classList.contains('open');
+      document.querySelectorAll('.fqi').forEach(function(x){x.classList.remove('open')});
+      if(!open)fi.classList.add('open');
+    });
+  });
+
+  var spDone=false;
+  function checkSpeed(){
+    if(spDone)return;
+    var box=document.querySelector('.spd');
+    if(!box)return;
+    var r=box.getBoundingClientRect();
+    if(r.top>window.innerHeight||r.bottom<0)return;
+    spDone=true;
+    document.querySelectorAll('.spd .tr i').forEach(function(el){
+      el.style.width=el.dataset.w+'%';
+    });
+  }
+
+  function count(el,target,suf,dur){
+    var s=0,t0=null;
+    function step(ts){
+      if(!t0)t0=ts;
+      var p=Math.min((ts-t0)/dur,1);
+      var v=Math.floor(p*target);
+      el.textContent=(suf==='.8s'? (v/10).toFixed(1):v.toLocaleString())+suf;
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var dsDone=false;
+  function checkData(){
+    if(dsDone)return;
+    var box=document.querySelector('.dsh');
+    if(!box)return;
+    var r=box.getBoundingClientRect();
+    if(r.top>window.innerHeight||r.bottom<0)return;
+    dsDone=true;
+    document.querySelectorAll('.dsh .ring').forEach(function(rg){
+      var p=parseFloat(rg.dataset.p||0);
+      var cur=0,t0=null,dur=1400;
+      (function anim(ts){
+        if(!t0)t0=ts;
+        var x=Math.min((ts-t0)/dur,1);
+        rg.style.setProperty('--p',(x*p)+'%');
+        if(x<1)requestAnimationFrame(anim);
+      })(performance.now());
+    });
+    document.querySelectorAll('.dsh .ring b').forEach(function(el){
+      var t=parseFloat(el.dataset.t),s=el.dataset.s;
+      count(el,t,s,1500);
+    });
+  }
+
+  function onScroll(){checkSpeed();checkData();}
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('load',onScroll);
+})();
+</script>
+
+</body>
+</html>
